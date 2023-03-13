@@ -48,7 +48,6 @@ function stopModal() {
   modalbg.style.display = "none";
 }
 
-
 //Mes critères de validation pour chaque champ :
 
 function firstNameValidation() {
@@ -138,7 +137,6 @@ function submitForm(e) {
   birthDateValidation();
   participationNumber();
   locationValidation();
-  //conditionsValidation();
   validation();
 }
 
@@ -150,7 +148,6 @@ function validation() {
   //Vérification si prénom correct
 
   if (inputsValidity.first === false) {
-    //alert("Veuillez remplir le prénom");
     const firstnNameError = document.querySelector(".formData:nth-child(1)");
     firstnNameError.setAttribute("data-error-visible", "true");
 
@@ -164,14 +161,12 @@ function validation() {
   //Vérification si nom correct
 
   if (inputsValidity.last === false) {
-    //alert("Veuillez remplir le nom");
     const lastNameError = document.querySelector(".formData:nth-child(2)");
     lastNameError.setAttribute("data-error-visible", "true");
 
     lastNameError.dataset.error =
       "Veuillez entrer votre nom (minimum 2 caractères)";
   } else {
-    //alert("Veuillez remplir le nom");
     const lastNameError = document.querySelector(".formData:nth-child(2)");
     lastNameError.setAttribute("data-error-visible", "false");
   }
@@ -179,13 +174,11 @@ function validation() {
   //Vérification si email correct
 
   if (inputsValidity.email === false) {
-    // alert("Veuillez remplir votre email");
     const emailError = document.querySelector(".formData:nth-child(3)");
     emailError.setAttribute("data-error-visible", "true");
 
     emailError.dataset.error = "Veuillez entrer une adresse email valide";
   } else {
-    // alert("Veuillez remplir votre email");
     const emailError = document.querySelector(".formData:nth-child(3)");
     emailError.setAttribute("data-error-visible", "false");
   }
@@ -193,13 +186,11 @@ function validation() {
   //Vérification si date de naissance correct
 
   if (inputsValidity.date === false) {
-    // alert("Veuillez remplir la date");
     const dateError = document.querySelector(".formData:nth-child(4)");
     dateError.setAttribute("data-error-visible", "true");
 
     dateError.dataset.error = "Veuillez entrer votre date de naissance";
   } else {
-    // alert("Veuillez remplir la date");
     const dateError = document.querySelector(".formData:nth-child(4)");
     dateError.setAttribute("data-error-visible", "false");
   }
@@ -207,14 +198,12 @@ function validation() {
   //Vérification si nbr de participation correct
 
   if (inputsValidity.participation === false) {
-    // alert("Veuillez indiquez votre nombre de participation");
     const participationError = document.querySelector(".formData:nth-child(5)");
     participationError.setAttribute("data-error-visible", "true");
 
     participationError.dataset.error =
       "Veuillez entrer votre nombre de participation (chiffre entre 0 et 99)";
   } else {
-    // alert("Veuillez indiquez votre nombre de participation");
     const participationError = document.querySelector(".formData:nth-child(5)");
     participationError.setAttribute("data-error-visible", "false");
   }
@@ -223,10 +212,10 @@ function validation() {
     const locationError = document.querySelector(".text-label");
 
     locationError.style.color = "red";
-   // const locationErrorDiv = document.querySelector(".formData:nth-child(6)");
+    // const locationErrorDiv = document.querySelector(".formData:nth-child(6)");
 
     //locationErrorDiv.dataset.error = "Veuillez cocher une option";
-  } 
+  }
   if (
     inputsValidity.first &&
     inputsValidity.last &&
@@ -235,6 +224,6 @@ function validation() {
     inputsValidity.participation &&
     inputsValidity.location === true
   ) {
-    alert('Merci pour votre inscription')
+    alert("Merci pour votre inscription");
   }
 }
