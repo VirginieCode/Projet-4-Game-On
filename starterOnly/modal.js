@@ -224,6 +224,53 @@ function validation() {
     inputsValidity.participation &&
     inputsValidity.location === true
   ) {
-    alert("Merci pour votre inscription");
+    return validate();
   }
+
+   //Création de la fonction validate() comprenant le delete formulaire et message de remerciement
+
+  function validate() {
+    deleteFormualaire();
+    messageRemerciement();
+  }
+
+  //Création fonction pour suppression du formulaire
+
+  function deleteFormualaire() {
+    const removeForm = document.querySelector("form");
+    removeForm.remove();
+  }
+
+  // Remplacement du formulaire par un message de remerciement
+
+  function messageRemerciement() {
+    const content = document.querySelector(".content");
+
+    const bodyMessage = document.createElement("div");
+
+    content.appendChild(bodyMessage);
+
+    const texteMessage = document.createTextNode(
+      "Merci pour votre inscription"
+    );
+    bodyMessage.appendChild(texteMessage);
+
+    const buttonClose = document.createElement("button");
+
+    content.appendChild(buttonClose);
+
+    const closeMessage = document.createTextNode("Fermer");
+    buttonClose.appendChild(closeMessage);
+
+    bodyMessage.classList.add("thanksMessage");
+    buttonClose.classList.add("btnCloseModal");
+
+    buttonClose.addEventListener("click", close);
+
+    function close() {
+      stopModal();
+      window.location.reload();
+    }
+  }
+
 }
