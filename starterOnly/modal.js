@@ -52,73 +52,68 @@ function stopModal() {
 
 function firstNameValidation() {
   if (firstName.value.length < firstName.getAttribute("minlength")) {
-    inputsValidity.first = false;
+   
+    return false
   } else {
-    inputsValidity.first = true;
+    
+    return true
   }
 }
 
 function lastNameValidation() {
   lastName.setAttribute("minlength", "2");
   if (lastName.value.length < lastName.getAttribute("minlength")) {
-    inputsValidity.last = false;
+    return false
   } else {
-    inputsValidity.last = true;
+    return true
   }
 }
 
 function emailValidation() {
   if (email.value.match(emailRegex)) {
-    inputsValidity.email = true;
+    return true
   } else {
-    inputsValidity.email = false;
+    return false
   }
 }
 
 function birthDateValidation() {
   if (birthDate.value.match(birthDateRegex)) {
-    inputsValidity.date = true;
+    return true
   } else {
-    inputsValidity.date = false;
+    return false
   }
 }
 
 function participationNumber() {
   if (parseInt(participationNombreChamp.value) < maxParticipation) {
-    inputsValidity.participation = true;
+    return true
   } else {
-    inputsValidity.participation = false;
+    return false
   }
 }
 
 function locationValidation() {
   if (document.getElementById("location1").checked) {
-    inputsValidity.location = true;
+    return true
   } else if (document.getElementById("location2").checked) {
-    inputsValidity.location = true;
+    return true
   } else if (document.getElementById("location3").checked) {
-    inputsValidity.location = true;
+    return true
   } else if (document.getElementById("location4").checked) {
-    inputsValidity.location = true;
+    return true
   } else if (document.getElementById("location5").checked) {
-    inputsValidity.location = true;
+    return true
   } else if (document.getElementById("location6").checked) {
-    inputsValidity.location = true;
+     return true
   } else {
-    inputsValidity.location = false;
+    return false
   }
 }
 
 //Création de la constante inputsValidity qui va déterminer si un inputs est valide
 
-const inputsValidity = {
-  first: false,
-  last: false,
-  email: false,
-  date: false,
-  participation: false,
-  location: false,
-};
+
 
 //Envoie du formulaire
 
@@ -142,12 +137,15 @@ function submitForm(e) {
 
 //Verification des champs du formulaire et affichage des erreurs
 
-const test = document.querySelector(".formData");
+//const test = document.querySelector(".formData");
 
 function validation() {
   //Vérification si prénom correct
 
-  if (inputsValidity.first === false) {
+ /* const Forminputs = document.querySelectorAll('input');
+  Forminputs.forEach(input => console.log(input));*/
+
+  if (firstNameValidation() === false) {
     const firstnNameError = document.querySelector(".formData:nth-child(1)");
     firstnNameError.setAttribute("data-error-visible", "true");
 
@@ -160,7 +158,7 @@ function validation() {
 
   //Vérification si nom correct
 
-  if (inputsValidity.last === false) {
+  if (lastNameValidation() === false) {
     const lastNameError = document.querySelector(".formData:nth-child(2)");
     lastNameError.setAttribute("data-error-visible", "true");
 
@@ -173,7 +171,7 @@ function validation() {
 
   //Vérification si email correct
 
-  if (inputsValidity.email === false) {
+  if (emailValidation() === false) {
     const emailError = document.querySelector(".formData:nth-child(3)");
     emailError.setAttribute("data-error-visible", "true");
 
@@ -185,7 +183,7 @@ function validation() {
 
   //Vérification si date de naissance correct
 
-  if (inputsValidity.date === false) {
+  if (birthDateValidation() === false) {
     const dateError = document.querySelector(".formData:nth-child(4)");
     dateError.setAttribute("data-error-visible", "true");
 
@@ -197,7 +195,7 @@ function validation() {
 
   //Vérification si nbr de participation correct
 
-  if (inputsValidity.participation === false) {
+  if (participationNumber () === false) {
     const participationError = document.querySelector(".formData:nth-child(5)");
     participationError.setAttribute("data-error-visible", "true");
 
@@ -208,21 +206,21 @@ function validation() {
     participationError.setAttribute("data-error-visible", "false");
   }
 
-  if (inputsValidity.location === false) {
+  if (locationValidation () === false) {
     const locationError = document.querySelector(".text-label");
 
-    locationError.style.color = "red";
-    // const locationErrorDiv = document.querySelector(".formData:nth-child(6)");
+   locationError.style.color = "red";
+   /*const locationErrorDiv = document.querySelector(".formData:nth-child(6)");
 
-    //locationErrorDiv.dataset.error = "Veuillez cocher une option";
+    locationErrorDiv.dataset.error = "Veuillez cocher une option"; */
   }
   if (
-    inputsValidity.first &&
-    inputsValidity.last &&
-    inputsValidity.email &&
-    inputsValidity.date &&
-    inputsValidity.participation &&
-    inputsValidity.location === true
+    firstNameValidation () &&
+    lastNameValidation () &&
+    emailValidation () &&
+    birthDateValidation () &&
+    participationNumber() &&
+    locationValidation() === true
   ) {
     return validate();
   }
