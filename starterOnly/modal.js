@@ -30,12 +30,7 @@ function stopModal() {
 }
 
 //Les champs du formulaire
-const firstName = document.getElementById("first");
-const firstNameValue = document.getElementById("first").value;
-const lastName = document.getElementById("last");
-const email = document.getElementById("email");
-const birthDate = document.getElementById("birthdate");
-const participationNombreChamp = document.getElementById("quantity");
+
 const formDataInputs = document.querySelectorAll("input");
 const conditionsCheckbox = document.getElementById("checkbox1");
 
@@ -51,10 +46,6 @@ let errorMsg = {
   location: "Veuillez cocher le lieu",
 };
 
-//Regex pour vérifier email et date de naissance
-
-var emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-var birthDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 //Envoie du formulaire
 
@@ -79,13 +70,9 @@ function validation() {
   for (let i = 0; i < formDataInputs.length; i++) {
     if (formDataInputs[i].value === "") {
       let inputNameattr = formDataInputs[i].getAttribute("name"); //Récupération de l'attribut name pour chaque input
-      const uniqueInput = inputNameattr; // Je déclare que la variable 'uniqueInput' correspond au name de chaque input
-      //console.log(uniqueInput)
-      const error = errorMsg[uniqueInput]; //Affichque du message d'erreur récupérer dans l'objet 'errorMsg' qui correspond au name de l'input
+      const error = errorMsg[inputNameattr]; //Affichque du message d'erreur récupérer dans l'objet 'errorMsg' qui correspond au name de l'input
 
-      // console.log(error)
       let divDataForm = formDataInputs[i].closest(".formData"); //Ici je récupère la div la plus proche de chaque input
-      divDataForm.setAttribute("data-error-visible","true") // Application de l'attribue data-error
       let errorExisting = divDataForm.querySelector(".errorMsg"); //Récupération de la class du msg d'erreur
 
       if (errorExisting) {
@@ -93,9 +80,10 @@ function validation() {
       } // ici je précise que si il y a déjà un message d'erreur alors il faut supprimer le précédant à fin que il n'y en ai que un, et que il ne se rajoute à l'autre
 
       let errorDiv = document.createElement("div"); //Création de la div pour le msg d'erreur
-      errorDiv.innerText = error;
+     
       divDataForm.appendChild(errorDiv); //Ajout du message à la div
-
+      divDataForm.setAttribute("data-error-visible","true")
+      divDataForm.dataset.error = error; // Application de l'attribue data-error
       errorDiv.classList.add("errorMsg"); //J'attribue une class au msg d'erreur
 
       allInputs = false; // Si un input est incorrect je lui set la valeur faux
@@ -121,34 +109,36 @@ function validation() {
 //Création d'une boucle for qui va vérifier si la ma checkbox condition est bien cochée
 
     if (!conditionsCheckbox.checked) {
-      conditionsCheckbox.checked = true; //coche la case si ce n'est pas le cas
 
-      const checkboxErrorMsg =
-        "Veuillez cocher la case pour accepter les conditions"; // Création du message d'erreur
+     // const checkboxErrorMsg =
+       // "Veuillez cocher la case pour accepter les conditions"; // Création du message d'erreur
       let checkboxInputDiv = conditionsCheckbox.closest(".formData");
       let existingError = checkboxInputDiv.querySelector(".error-checkbox");
       if (existingError) {
         existingError.remove();
       }
       let errorcheckboxDiv = document.createElement("div"); 
-      errorcheckboxDiv.innerText = checkboxErrorMsg;
-      errorcheckboxDiv.className = "error-checkbox";
+     // errorcheckboxDiv.innerText = checkboxErrorMsg;
+     checkboxInputDiv.setAttribute("data-error-visible","true")
+      checkboxInputDiv.dataset.error = "Veuillez cocher la case pour accepter les conditions";
+      errorcheckboxDiv.classList.add("errorMsg");
       checkboxInputDiv.appendChild(errorcheckboxDiv); //Je relie ma div contenant le message d'erreur à la div la plus proche de ma checkbox
       allInputs = false;
     }
 
      //Création d'un addEventListener qui va écouter les inputs et supprimer le message d'error dés que la valeur de l'input est modifiée
 
-    conditionsCheckbox.addEventListener("input", function () {
+    conditionsCheckbox.addEventListener("click", function () {
       
       let thisDivDataForm = this.closest(".formData"); 
 
 
-      let existingError = thisDivDataForm.querySelector(".error-checkbox");
+      let existingError = thisDivDataForm.querySelector(".errorMsg");
 
     
-      if (existingError) {
+      if (conditionsCheckbox.checked) {
         existingError.remove();
+        thisDivDataForm.setAttribute("data-error-visible","false") 
       }
     });
   }
