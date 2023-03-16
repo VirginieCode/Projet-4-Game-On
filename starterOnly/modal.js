@@ -15,25 +15,6 @@ const formData = document.querySelectorAll(".formData");
 // Close Modal query selector
 const modalClose = document.querySelector(".close");
 
-//Les champs du formulaire
-const firstName = document.querySelector(".formData:nth-child(1) input");
-const lastName = document.querySelector(".formData:nth-child(2) input");
-const email = document.querySelector(".formData:nth-child(3) input");
-const birthDate = document.querySelector(".formData:nth-child(4) input");
-const participationNombreChamp = document.querySelector(
-  ".formData:nth-child(5) input"
-);
-const textControl = document.querySelector(".text-control");
-const maxParticipation = participationNombreChamp.getAttribute("max");
-const checkboxCondition = document.querySelector(
-  ".checkbox2-label:nth-child(1) input"
-);
-const input = document.querySelector("input");
-
-//Regex
-var emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-var birthDateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 modalClose.addEventListener("click", stopModal);
@@ -48,72 +29,32 @@ function stopModal() {
   modalbg.style.display = "none";
 }
 
-//Mes critères de validation pour chaque champ :
+//Les champs du formulaire
+const firstName = document.getElementById("first");
+const firstNameValue = document.getElementById("first").value;
+const lastName = document.getElementById("last");
+const email = document.getElementById("email");
+const birthDate = document.getElementById("birthdate");
+const participationNombreChamp = document.getElementById("quantity");
+const formDataInputs = document.querySelectorAll("input");
+const conditionsCheckbox = document.getElementById("checkbox1");
 
-function firstNameValidation() {
-  if (firstName.value.length < firstName.getAttribute("minlength")) {
-   
-    return false
-  } else {
-    
-    return true
-  }
-}
+//Création des messages d'erreurs qui s'affichent lorsque un inputs est incorrect
 
-function lastNameValidation() {
-  lastName.setAttribute("minlength", "2");
-  if (lastName.value.length < lastName.getAttribute("minlength")) {
-    return false
-  } else {
-    return true
-  }
-}
+let errorMsg = {
+  first: "Veuillez entrer votre prénom",
+  last: "Veuillez entrer votre nom",
+  email: "Veuillez entrer un email valide",
+  birthdate: "Veuillez entrer votre date de naissance",
+  quantity:
+    "Veuillez indiquer le nombre de tournoi auxquelles vous avez participé",
+  location: "Veuillez cocher le lieu",
+};
 
-function emailValidation() {
-  if (email.value.match(emailRegex)) {
-    return true
-  } else {
-    return false
-  }
-}
+//Regex pour vérifier email et date de naissance
 
-function birthDateValidation() {
-  if (birthDate.value.match(birthDateRegex)) {
-    return true
-  } else {
-    return false
-  }
-}
-
-function participationNumber() {
-  if (parseInt(participationNombreChamp.value) < maxParticipation) {
-    return true
-  } else {
-    return false
-  }
-}
-
-function locationValidation() {
-  if (document.getElementById("location1").checked) {
-    return true
-  } else if (document.getElementById("location2").checked) {
-    return true
-  } else if (document.getElementById("location3").checked) {
-    return true
-  } else if (document.getElementById("location4").checked) {
-    return true
-  } else if (document.getElementById("location5").checked) {
-    return true
-  } else if (document.getElementById("location6").checked) {
-     return true
-  } else {
-    return false
-  }
-}
-
-//Création de la constante inputsValidity qui va déterminer si un inputs est valide
-
-
+var emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+var birthDateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 //Envoie du formulaire
 
@@ -125,107 +66,125 @@ form.addEventListener("submit", submitForm);
 
 function submitForm(e) {
   e.preventDefault();
-
-  firstNameValidation();
-  lastNameValidation();
-  emailValidation();
-  birthDateValidation();
-  participationNumber();
-  locationValidation();
   validation();
 }
 
-//Verification des champs du formulaire et affichage des erreurs
-
-//const test = document.querySelector(".formData");
+//Création fonction validation : pour verification des inputs du formulaire et affichage des erreurs
 
 function validation() {
-  //Vérification si prénom correct
+  let allInputs = true; //Je set la valeur true à mes inputs
 
- /* const Forminputs = document.querySelectorAll('input');
-  Forminputs.forEach(input => console.log(input));*/
+//Création d'une boucle for qui va vérifier si la valeur de mes inputs n'est pas vide
 
-  if (firstNameValidation() === false) {
-    const firstnNameError = document.querySelector(".formData:nth-child(1)");
-    firstnNameError.setAttribute("data-error-visible", "true");
+  for (let i = 0; i < formDataInputs.length; i++) {
+    if (formDataInputs[i].value === "") {
+      let inputNameattr = formDataInputs[i].getAttribute("name"); //Récupération de l'attribut name pour chaque input
+      const uniqueInput = inputNameattr; // Je déclare que la variable 'uniqueInput' correspond au name de chaque input
+      //console.log(uniqueInput)
+      const error = errorMsg[uniqueInput]; //Affichque du message d'erreur récupérer dans l'objet 'errorMsg' qui correspond au name de l'input
 
-    firstnNameError.dataset.error =
-      "Veuillez entrer votre prénom (minimum 2 caractères)";
-  } else {
-    const firstnNameError = document.querySelector(".formData:nth-child(1)");
-    firstnNameError.setAttribute("data-error-visible", "false");
+      // console.log(error)
+      let divDataForm = formDataInputs[i].closest(".formData"); //Ici je récupère la div la plus proche de chaque input
+      divDataForm.setAttribute("data-error-visible","true") // Application de l'attribue data-error
+      let errorExisting = divDataForm.querySelector(".errorMsg"); //Récupération de la class du msg d'erreur
+
+      if (errorExisting) {
+        errorExisting.remove();
+      } // ici je précise que si il y a déjà un message d'erreur alors il faut supprimer le précédant à fin que il n'y en ai que un, et que il ne se rajoute à l'autre
+
+      let errorDiv = document.createElement("div"); //Création de la div pour le msg d'erreur
+      errorDiv.innerText = error;
+      divDataForm.appendChild(errorDiv); //Ajout du message à la div
+
+      errorDiv.classList.add("errorMsg"); //J'attribue une class au msg d'erreur
+
+      allInputs = false; // Si un input est incorrect je lui set la valeur faux
+    }
+
+    //Création d'un addEventListener qui va écouter les inputs et supprimer le message d'error dés que la valeur de l'input est modifiée
+
+    formDataInputs[i].addEventListener("input", function () {
+      
+      let newDivDataForm = this.closest(".formData"); //div la plus proche de l'input
+
+     
+      let existingError = newDivDataForm.querySelector(".errorMsg"); //recherche du message d'erreur dans la div la plus proche
+
+      
+      if (existingError) {
+        existingError.remove(); //Si message d'erreur existant, il faut le supprimer
+        newDivDataForm.setAttribute("data-error-visible","false") 
+      }
+    });
+
+    
+//Création d'une boucle for qui va vérifier si la ma checkbox condition est bien cochée
+
+    if (!conditionsCheckbox.checked) {
+      conditionsCheckbox.checked = true; //coche la case si ce n'est pas le cas
+
+      const checkboxErrorMsg =
+        "Veuillez cocher la case pour accepter les conditions"; // Création du message d'erreur
+      let checkboxInputDiv = conditionsCheckbox.closest(".formData");
+      let existingError = checkboxInputDiv.querySelector(".error-checkbox");
+      if (existingError) {
+        existingError.remove();
+      }
+      let errorcheckboxDiv = document.createElement("div"); 
+      errorcheckboxDiv.innerText = checkboxErrorMsg;
+      errorcheckboxDiv.className = "error-checkbox";
+      checkboxInputDiv.appendChild(errorcheckboxDiv); //Je relie ma div contenant le message d'erreur à la div la plus proche de ma checkbox
+      allInputs = false;
+    }
+
+     //Création d'un addEventListener qui va écouter les inputs et supprimer le message d'error dés que la valeur de l'input est modifiée
+
+    conditionsCheckbox.addEventListener("input", function () {
+      
+      let thisDivDataForm = this.closest(".formData"); 
+
+
+      let existingError = thisDivDataForm.querySelector(".error-checkbox");
+
+    
+      if (existingError) {
+        existingError.remove();
+      }
+    });
   }
 
-  //Vérification si nom correct
+  /*
+  function locationValidation() {
+    if (
+      document.getElementById("location1").checked ||
+      document.getElementById("location2").checked ||
+      document.getElementById("location3").checked ||
+      document.getElementById("location4").checked ||
+      document.getElementById("location5").checked ||
+      document.getElementById("location6").checked
+    ) {
+      return true;
+    } else {
+      const locationError = document.querySelector(".text-label");
 
-  if (lastNameValidation() === false) {
-    const lastNameError = document.querySelector(".formData:nth-child(2)");
-    lastNameError.setAttribute("data-error-visible", "true");
+      locationError.style.color = "red";
 
-    lastNameError.dataset.error =
-      "Veuillez entrer votre nom (minimum 2 caractères)";
-  } else {
-    const lastNameError = document.querySelector(".formData:nth-child(2)");
-    lastNameError.setAttribute("data-error-visible", "false");
+      const locationErrorDiv = document.querySelector(".formData:nth-child(6)");
+
+      //locationErrorDiv.dataset.error = "Veuillez cocher une option";
+      return false;
+    }
   }
 
-  //Vérification si email correct
 
-  if (emailValidation() === false) {
-    const emailError = document.querySelector(".formData:nth-child(3)");
-    emailError.setAttribute("data-error-visible", "true");
+  */
 
-    emailError.dataset.error = "Veuillez entrer une adresse email valide";
-  } else {
-    const emailError = document.querySelector(".formData:nth-child(3)");
-    emailError.setAttribute("data-error-visible", "false");
+  // Ici je verifie si tous les inputs sont true, si pas d'erreur lancement de la fonction validate
+  if (allInputs) {
+    validate();
   }
 
-  //Vérification si date de naissance correct
-
-  if (birthDateValidation() === false) {
-    const dateError = document.querySelector(".formData:nth-child(4)");
-    dateError.setAttribute("data-error-visible", "true");
-
-    dateError.dataset.error = "Veuillez entrer votre date de naissance";
-  } else {
-    const dateError = document.querySelector(".formData:nth-child(4)");
-    dateError.setAttribute("data-error-visible", "false");
-  }
-
-  //Vérification si nbr de participation correct
-
-  if (participationNumber () === false) {
-    const participationError = document.querySelector(".formData:nth-child(5)");
-    participationError.setAttribute("data-error-visible", "true");
-
-    participationError.dataset.error =
-      "Veuillez entrer votre nombre de participation (chiffre entre 0 et 99)";
-  } else {
-    const participationError = document.querySelector(".formData:nth-child(5)");
-    participationError.setAttribute("data-error-visible", "false");
-  }
-
-  if (locationValidation () === false) {
-    const locationError = document.querySelector(".text-label");
-
-   locationError.style.color = "red";
-   /*const locationErrorDiv = document.querySelector(".formData:nth-child(6)");
-
-    locationErrorDiv.dataset.error = "Veuillez cocher une option"; */
-  }
-  if (
-    firstNameValidation () &&
-    lastNameValidation () &&
-    emailValidation () &&
-    birthDateValidation () &&
-    participationNumber() &&
-    locationValidation() === true
-  ) {
-    return validate();
-  }
-
-   //Création de la fonction validate() comprenant le delete formulaire et message de remerciement
+  //Création de la fonction validate qui renvoie les fonctions : deleteFormualaire et messageRemerciement
 
   function validate() {
     deleteFormualaire();
@@ -270,5 +229,8 @@ function validation() {
       window.location.reload();
     }
   }
-
 }
+
+
+
+
